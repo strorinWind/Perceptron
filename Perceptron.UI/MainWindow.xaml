@@ -9,7 +9,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
-            <RowDefinition/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Menu Height="20" VerticalAlignment="Top" Grid.Row="0">
@@ -21,10 +21,30 @@
             </MenuItem>
         </Menu>
         <Grid Grid.Row="1">
-            <Button>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button  Grid.Column="0">Learn(Normal)
+            </Button>
+            <Menu Grid.Column="1">
+                <MenuItem Header="⯆" VerticalAlignment="Center" Height="40"></MenuItem>
+            </Menu>
+            <Button Grid.Column="2">Stop
             </Button>
         </Grid>
         <Grid Grid.Row="2">
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="1">
+                <Canvas Background="Black" Name="PointField"/>
+            </Grid>
         </Grid>
         
     </Grid>
