@@ -46,9 +46,9 @@ namespace Perceptron.UI
                 var c = int.Parse(a[2])-1;
 
                 var rect = new Rectangle();
-                rect.Width = 5;
-                rect.Height = 5;
-                rect.Stroke = new SolidColorBrush(colors[c]);
+                rect.Width = 2;
+                rect.Height = 2;
+                //rect.Stroke = new SolidColorBrush(colors[c]);
                 rect.Fill = new SolidColorBrush(colors[c]);
                 Canvas.SetLeft(rect, x-2);
                 Canvas.SetTop(rect, y-2);
