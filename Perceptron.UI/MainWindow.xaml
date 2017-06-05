@@ -27,7 +27,7 @@
                 <ColumnDefinition Width="40"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button  Grid.Column="0">Learn(Normal)
+            <Button  Grid.Column="0" Name="LearnBtn" Click="LearnBtn_Click">Learn(Normal)
             </Button>
             <Menu Grid.Column="1">
                 <MenuItem Header="⯆" VerticalAlignment="Center" Height="40"></MenuItem>

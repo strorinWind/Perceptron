@@ -22,10 +22,28 @@ namespace Perceptron.UI
     public partial class MainWindow : Window
     {
         private Color[] colors = { Colors.Yellow, Colors.Blue, Colors.Red};
+        private double[][] inputs;
+        private double[][] outputs;
 
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void ReadPoints(string path)
+        {
+            var m = File.ReadAllLines(path);
+            inputs = new double[m.Length - 6][];
+            outputs = new double[m.Length - 6][];
+            for (int i = 6; i < m.Length; i++)
+            {
+                var a = m[i].Replace('.', ',').Split();
+                var x = double.Parse(a[0]);
+                var y = double.Parse(a[1]);
+                inputs[i - 6] = new double[] { x, y};
+                var c = double.Parse(a[2]);
+                outputs[i - 6] = new double[] { c };
+            }
         }
 
         private void DrawPoints()
@@ -38,18 +56,18 @@ namespace Perceptron.UI
             var height = cns.ActualHeight;
 
             var m = File.ReadAllLines("../../N.points");
-            for (int i = 6; i < m.Length; i++)
-            {
-                var a = m[i].Replace('.',',').Split();
-                var x = (double.Parse(a[0])+1)*width/3;
-                var y = (double.Parse(a[1])+1)*height/3;
-                var c = int.Parse(a[2])-1;
+            ReadPoints("../../N.points");
+            for (int i = 0; i < inputs.Length; i++)
+            {               
+                var x = (inputs[i][0]+1)*width/3;
+                var y = (inputs[i][1]+1)*height/3;
+                var c = outputs[i][0]-1;
 
                 var rect = new Rectangle();
                 rect.Width = 2;
                 rect.Height = 2;
                 //rect.Stroke = new SolidColorBrush(colors[c]);
-                rect.Fill = new SolidColorBrush(colors[c]);
+                rect.Fill = new SolidColorBrush(colors[(int)Math.Round(c)]);
                 Canvas.SetLeft(rect, x-2);
                 Canvas.SetTop(rect, y-2);
                 cns.Children.Add(rect);
@@ -59,6 +77,12 @@ namespace Perceptron.UI
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {       
             DrawPoints();
+        }
+
+        private void LearnBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var n = new Network();
+            n.Learn(inputs, outputs);
         }
     }
 }
