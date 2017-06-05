@@ -55,12 +55,13 @@ namespace Perceptron.UI
             var width = cns.ActualWidth;
             var height = cns.ActualHeight;
 
-            var m = File.ReadAllLines("../../N.points");
+
+            //ReadPoints("../../SquareCartesian.points");
             ReadPoints("../../N.points");
             for (int i = 0; i < inputs.Length; i++)
             {               
                 var x = (inputs[i][0]+1)*width/3;
-                var y = (inputs[i][1]+1)*height/3;
+                var y = (inputs[i][1]+1)*height/2.7;
                 var c = outputs[i][0]-1;
 
                 var rect = new Rectangle();
