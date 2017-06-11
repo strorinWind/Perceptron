@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Network;
 
 namespace Perceptron.UI
 {
@@ -42,7 +43,15 @@ namespace Perceptron.UI
                 var y = double.Parse(a[1]);
                 inputs[i - 6] = new double[] { x, y};
                 var c = double.Parse(a[2]);
-                outputs[i - 6] = new double[] { c };
+                if (c==1)
+                {
+                    outputs[i - 6] = new double[] { 1, 0 };
+                }
+                else
+                {
+                    outputs[i - 6] = new double[] { 0, 1 };
+                }
+                
             }
         }
 
@@ -56,13 +65,13 @@ namespace Perceptron.UI
             var height = cns.ActualHeight;
 
 
-            //ReadPoints("../../SquareCartesian.points");
-            ReadPoints("../../N.points");
+            ReadPoints("../../SquareCartesian.points");
+            //ReadPoints("../../N.points");
             for (int i = 0; i < inputs.Length; i++)
             {               
                 var x = (inputs[i][0]+1)*width/3;
                 var y = (inputs[i][1]+1)*height/2.7;
-                var c = outputs[i][0]-1;
+                double c = outputs[i][0] > outputs[i][1] ? 1 : 0;
 
                 var rect = new Rectangle();
                 rect.Width = 2;
@@ -82,8 +91,9 @@ namespace Perceptron.UI
 
         private void LearnBtn_Click(object sender, RoutedEventArgs e)
         {
-            var n = new Network();
-            n.Learn(inputs, outputs);
+            var n1 = new NetworkBad(10);
+            n1.Learn(inputs, outputs);
+
         }
     }
 }

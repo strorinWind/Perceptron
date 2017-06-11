@@ -68,6 +68,7 @@ namespace Network
                     errors.Add(CalculateError(dataSet.Targets));
                 }
                 error = errors.Average();
+                Console.WriteLine(error);
                 numEpochs++;
             }
         }
@@ -83,7 +84,7 @@ namespace Network
         private void BackPropagate(params double[] targets)
         {
             var i = 0;
-            OutputLayer.ForEach(a => a.CalculateGradient(targets[i++]));
+            OutputLayer.ForEach(a => a.CalculateGradient(targets[i]));
             HiddenLayer.ForEach(a => a.CalculateGradient());
             HiddenLayer.ForEach(a => a.UpdateWeights(LearnRate, Momentum));
             OutputLayer.ForEach(a => a.UpdateWeights(LearnRate, Momentum));
@@ -98,7 +99,7 @@ namespace Network
         private double CalculateError(params double[] targets)
         {
             var i = 0;
-            return OutputLayer.Sum(a => Math.Abs(a.CalculateError(targets[i++])));
+            return OutputLayer.Sum(a => Math.Abs(a.CalculateError(targets[0])));
         }
         #endregion
 
