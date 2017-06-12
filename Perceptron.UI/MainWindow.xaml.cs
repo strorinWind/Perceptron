@@ -30,11 +30,14 @@ namespace Perceptron.UI
         private double[][] outputs;
         private int hidden;
         private List<int> errors = new List<int>();
+        private double[][] comput;
 
         public MainWindow()
         {
             InitializeComponent();
             FillComboBox();
+            ReadPoints("../../SquareCartesian.points");
+            //ReadPoints("../../N.points");
         }
 
         private void FillComboBox()
@@ -73,7 +76,7 @@ namespace Perceptron.UI
             }
         }
 
-        private void DrawPoints()
+        private void DrawPoints(double[][] input,double[][] output)
         {
             var cns = PointField;
             cns.Children.Clear();
@@ -82,17 +85,15 @@ namespace Perceptron.UI
             var width = cns.ActualWidth;
             var height = cns.ActualHeight;
 
-            ReadPoints("../../SquareCartesian.points");
-            //ReadPoints("../../N.points");
-            for (int i = 0; i < inputs.Length; i++)
+            for (int i = 0; i < input.Length; i++)
             {
-                var x = (inputs[i][0] + 1) * width / 3;
-                var y = (inputs[i][1] + 1) * height / 2.7;
-                double c = outputs[i][0] > outputs[i][1] ? 1 : 0;
+                var x = (input[i][0] + 1) * width / 3;
+                var y = (input[i][1] + 1) * height / 2.7;
+                double c = output[i][0] > output[i][1] ? 1 : 0;
 
                 var rect = new Rectangle();
-                rect.Width = 2;
-                rect.Height = 2;
+                rect.Width = 3;
+                rect.Height = 3;
                 //rect.Stroke = new SolidColorBrush(colors[c]);
                 rect.Fill = new SolidColorBrush(colors[(int)Math.Round(c)]);
                 Canvas.SetLeft(rect, x - 2);
@@ -103,7 +104,7 @@ namespace Perceptron.UI
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            DrawPoints();
+            DrawPoints(inputs,outputs);
         }
 
         private async void LearnBtn_Click(object sender, RoutedEventArgs e)
@@ -113,6 +114,8 @@ namespace Perceptron.UI
             {                
                 await Task.Delay(100);
                 Drawgraph(graph);
+                //DrawPoints(inputs,comput);
+                ComputePoints();
             }
             MessageBox.Show("Learning finished");
         }
@@ -128,11 +131,12 @@ namespace Perceptron.UI
             BackPropagationLearning teacher = new BackPropagationLearning(network);
 
             double error = 1;
-            int k = inputs.Length;
+            int k = inputs.Length;    
             while (k >= inputs.Length / 100)
             {
                 error = teacher.RunEpoch(inputs, outputs);
                 k = 0;
+                var lst = new double[inputs.Length][];
                 for (int i = 0; i < inputs.Length; i++)
                 {
                     var c = network.Compute(inputs[i]);
@@ -140,7 +144,9 @@ namespace Perceptron.UI
                     {
                         k++;
                     }
+                    lst[i] = c;
                 }
+                comput = lst;
                 errors.Add(k);
             }
         }
@@ -169,6 +175,34 @@ namespace Perceptron.UI
                 l.Stroke = Brushes.Red;
                 l.StrokeThickness = 2;
                 cns.Children.Add(l);
+            }
+        }
+
+        private void ComputePoints()
+        {
+            var cns = PointField;
+            cns.Children.Clear();
+            cns.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            cns.Arrange(new Rect(0, 0, this.Width, this.Height));
+            var width = cns.ActualWidth;
+            var height = cns.ActualHeight;
+
+            for (int i = 0; i < inputs.Length; i++)
+            {
+                var x = (inputs[i][0] + 1) * width / 3;
+                var y = (inputs[i][1] + 1) * height / 2.7;
+                double c = outputs[i][0] > outputs[i][1] ? 1 : 0;
+                double s = comput[i][0] > comput[i][1] ? 1 : 0;
+
+                var rect = new Rectangle();
+                rect.Width = 3;
+                rect.Height = 3;
+                rect.Stroke = new SolidColorBrush(colors[(int)Math.Round(s)]);
+                rect.StrokeThickness = 10;
+                rect.Fill = new SolidColorBrush(colors[(int)Math.Round(c)]);
+                Canvas.SetLeft(rect, x - 2);
+                Canvas.SetTop(rect, y - 2);
+                cns.Children.Add(rect);
             }
         }
     }
