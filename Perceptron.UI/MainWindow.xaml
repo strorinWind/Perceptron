@@ -5,12 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Perceptron.UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" SizeChanged="Window_SizeChanged">
+        Title="MainWindow" Height="600" Width="900" SizeChanged="Window_SizeChanged"
+        >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition Height="40"/>
             <RowDefinition/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Menu Height="20" VerticalAlignment="Top" Grid.Row="0">
             <MenuItem Header="Network">
@@ -40,10 +42,26 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
+            <Grid Name="leftGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label HorizontalAlignment="Center">Network Structure</Label>
+                <ComboBox Grid.Row="1" Width="100" Name="Combobox" Height="20" VerticalAlignment="Top" SelectionChanged="Combobox_Selected">
+                </ComboBox>
+                <Canvas Name="NNetwork" Grid.Row="2" Background="AliceBlue">
+                </Canvas>
+            </Grid>
             <Grid Grid.Column="1" Name="CnsGrid">
                 <Canvas Background="Black" Name="PointField"/>
             </Grid>
+
         </Grid>
-        
+        <Grid Grid.Row="3">
+            <Canvas Background="Black" Name="graph">
+            </Canvas>
+        </Grid>
     </Grid>
 </Window>

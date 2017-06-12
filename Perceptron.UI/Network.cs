@@ -57,7 +57,6 @@ namespace Perceptron.UI
                 // check error value to see if we need to stop
                 // ...
             }
-            return;
         }
     }
 }
