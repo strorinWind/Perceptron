@@ -1,5 +1,6 @@
 ﻿using AForge.Neuro;
 using AForge.Neuro.Learning;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,6 +19,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 
+
 namespace Perceptron.UI
 {
     /// <summary>
@@ -31,6 +33,7 @@ namespace Perceptron.UI
         private int hidden;
         private List<int> errors = new List<int>();
         private double[][] comput;
+        private CancellationToken token;
 
         public MainWindow()
         {
@@ -42,7 +45,7 @@ namespace Perceptron.UI
 
         private void FillComboBox()
         {
-            for (int i = 0; i <= 15; i++)
+            for (int i = 1; i <= 15; i++)
             {
                 var c = new ComboBoxItem();
                 c.Content = "2:" + i + ":2";
@@ -50,7 +53,7 @@ namespace Perceptron.UI
             }
             Combobox.Items.Add(new ComboBoxItem() { Content = "2:50:2" });
             Combobox.Items.Add(new ComboBoxItem() { Content = "2:100:2" });
-            Combobox.SelectedIndex = 10;
+            Combobox.SelectedIndex = 9;
         }
 
         private void ReadPoints(string path)
@@ -74,6 +77,7 @@ namespace Perceptron.UI
                     outputs[i - 6] = new double[] { 0, 1 };
                 }
             }
+            DrawPoints(inputs, outputs);
         }
 
         private void DrawPoints(double[][] input,double[][] output)
@@ -110,14 +114,16 @@ namespace Perceptron.UI
         private async void LearnBtn_Click(object sender, RoutedEventArgs e)
         {      
             var t = Task.Run(() => Learn());
-            while (t.IsCompleted != true)
+            
+            while (token.IsCancellationRequested!=true && t.IsCompleted != true)
             {                
                 await Task.Delay(100);
                 Drawgraph(graph);
                 //DrawPoints(inputs,comput);
                 ComputePoints();
             }
-            MessageBox.Show("Learning finished");
+            if (t.IsCompleted) MessageBox.Show("Learning finished");
+            //t.Dispose();
         }
 
         private void Learn()
@@ -164,17 +170,23 @@ namespace Perceptron.UI
             //graph.Arrange(new Rect(0, 0, this.Width, this.Height));
             cns.Height = 50;
             cns.Children.Clear();
-            var m = errors[0];
-            for (int i = 1; i < errors.Count; i++)
+            if (errors.Count() > 0)
             {
-                var l = new Line();
-                l.X1 = (i - 1) * 1;
-                l.X2 = i * 1;
-                l.Y1 = 50 - (50 * errors[i - 1] / m);
-                l.Y2 = 50 - (50 * errors[i] / m);
-                l.Stroke = Brushes.Red;
-                l.StrokeThickness = 2;
-                cns.Children.Add(l);
+                int m = 0;
+                try { m = errors.Max(); }
+                catch { m = errors[0]; }
+
+                for (int i = 1; i < errors.Count; i++)
+                {
+                    var l = new Line();
+                    l.X1 = (i - 1) * 1;
+                    l.X2 = i * 1;
+                    l.Y1 = 50 - (50 * errors[i - 1] / m);
+                    l.Y2 = 50 - (50 * errors[i] / m);
+                    l.Stroke = Brushes.Red;
+                    l.StrokeThickness = 2;
+                    cns.Children.Add(l);
+                }
             }
         }
 
@@ -205,5 +217,22 @@ namespace Perceptron.UI
                 cns.Children.Add(rect);
             }
         }
+
+        private void Open_Points(object sender, RoutedEventArgs e)
+        {
+            var c = new OpenFileDialog();
+            c.DefaultExt = ".points";
+            c.Filter = "Points |*.points";
+            c.ShowDialog();
+            if (c.FileName!="") ReadPoints(c.FileName);
+        }
+
+        /*
+        private void Stop_Click(object sender, RoutedEventArgs e)
+        {
+            var cs = new CancellationTokenSource();
+            token = cs.Token;
+            cs.Cancel();
+        }*/
     }
 }
