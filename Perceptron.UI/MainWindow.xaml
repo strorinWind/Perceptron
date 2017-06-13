@@ -16,11 +16,9 @@
         </Grid.RowDefinitions>
         <Menu Height="20" VerticalAlignment="Top" Grid.Row="0">
             <MenuItem Header="Network">
-                <MenuItem Header="Network"></MenuItem>
+
             </MenuItem>
-            <MenuItem Header="Shape">
-                <MenuItem Header="Shape"></MenuItem>
-            </MenuItem>
+
             <MenuItem Header="Points">
                 <MenuItem Header="Open Points" Click="Open_Points"></MenuItem>
             </MenuItem>
@@ -34,9 +32,9 @@
             </Grid.ColumnDefinitions>
             <Button  Grid.Column="0" Name="LearnBtn" Click="LearnBtn_Click">Learn(Normal)
             </Button>
-            <Menu Grid.Column="1">
+            <!--<Menu Grid.Column="1">
                 <MenuItem Header="⯆" VerticalAlignment="Center" Height="40"></MenuItem>
-            </Menu>
+            </Menu>-->
             <!--<Button Grid.Column="2" Click="Stop_Click">Stop
             </Button>-->
         </Grid>
