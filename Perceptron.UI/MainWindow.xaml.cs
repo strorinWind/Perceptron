@@ -118,9 +118,11 @@ namespace Perceptron.UI
             while (token.IsCancellationRequested!=true && t.IsCompleted != true)
             {                
                 await Task.Delay(100);
+                //Error.Text = (errors.Last() / inputs.Length * 100).ToString() + "%";
                 Drawgraph(graph);
                 //DrawPoints(inputs,comput);
                 ComputePoints();
+                
             }
             if (t.IsCompleted) MessageBox.Show("Learning finished");
             //t.Dispose();

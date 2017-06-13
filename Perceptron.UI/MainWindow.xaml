@@ -27,12 +27,17 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="25"/>
-                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="50"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button  Grid.Column="0" Name="LearnBtn" Click="LearnBtn_Click">Learn(Normal)
             </Button>
-            <!--<Menu Grid.Column="1">
+            <!--<StackPanel Grid.Column="2">
+                <Label HorizontalAlignment="Center">Error
+                </Label>
+                <TextBlock Name="Error" HorizontalAlignment="Center"></TextBlock>
+            </StackPanel>
+            <Menu Grid.Column="1">
                 <MenuItem Header="⯆" VerticalAlignment="Center" Height="40"></MenuItem>
             </Menu>-->
             <!--<Button Grid.Column="2" Click="Stop_Click">Stop
